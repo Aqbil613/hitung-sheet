@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hitung Ukuran Sheet Kardus</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      padding: 6px;
+      width: 200px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .hasil {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Hitung Ukuran Sheet Kardus</h2>
+
+  <label for="panjang">Panjang Kardus (P) [mm]</label>
+  <input type="number" id="panjang" placeholder="Contoh: 300" required>
+
+  <label for="lebar">Lebar Kardus (L) [mm]</label>
+  <input type="number" id="lebar" placeholder="Contoh: 200" required>
+
+  <label for="tinggi">Tinggi Kardus (T) [mm]</label>
+  <input type="number" id="tinggi" placeholder="Contoh: 150" required>
+
+  <label for="bahan">Jenis Bahan</label>
+  <select id="bahan">
+    <option value="b/f">b/f</option>
+    <option value="c/f">c/f</option>
+    <option value="bc/f">bc/f</option>
+  </select>
+
+  <button onclick="hitungUkuran()">Hitung</button>
+
+  <div class="hasil" id="hasil" style="display:none;"></div>
+
+  <script>
+    function hitungUkuran() {
+      const P = parseFloat(document.getElementById('panjang').value);
+      const L = parseFloat(document.getElementById('lebar').value);
+      const T = parseFloat(document.getElementById('tinggi').value);
+      const bahan = document.getElementById('bahan').value;
+
+      if (isNaN(P) || isNaN(L) || isNaN(T)) {
+        alert("Harap isi semua nilai Panjang, Lebar, dan Tinggi.");
+        return;
+      }
+
+      const tambahan = {
+        "b/f": { kuping: 30, flap: 3 },
+        "c/f": { kuping: 35, flap: 4 },
+        "bc/f": { kuping: 40, flap: 6 }
+      };
+
+      const kuping = tambahan[bahan].kuping;
+      const flap = tambahan[bahan].flap;
+
+      const panjang_sheet = (P + L) * 2 + kuping;
+      const lebar_sheet = L + T + flap;
+
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = `
+        <h3>Hasil Perhitungan:</h3>
+        <p><strong>Panjang Sheet:</strong> ${panjang_sheet.toLocaleString()} mm</p>
+        <p><strong>Lebar Sheet:</strong> ${lebar_sheet.toLocaleString()} mm</p>
+        <p><em>Jenis bahan: ${bahan}</em></p>
+      `;
+      hasilDiv.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
